@@ -25,37 +25,39 @@ namespace lab1
         {
             Console.WriteLine("\nEnter 'stop' to stop input");
             string input = Console.ReadLine();
-            
-            StreamWriter writer = new StreamWriter(file.Name);
-            while(input != "stop")
+
+            using (StreamWriter writer = new StreamWriter(file.Name))
             {
-                writer.WriteLine(input);
-                input = Console.ReadLine();
-                count++;
+                while (input != "stop")
+                {
+                    writer.WriteLine(input);
+                    input = Console.ReadLine();
+                    count++;
+                }
             }
-            writer.Flush();
-            writer.Close();
             
         }
 
         public static void printFile(FileStream file)
         {
-            StreamReader reader = new StreamReader(file.Name);
-            Console.WriteLine(reader.ReadToEnd());
-            reader.Close();
+            using (StreamReader reader = new StreamReader(file.Name))
+                Console.WriteLine(reader.ReadToEnd());
+            
         }
 
         public static int[] getNumberOfWords(FileStream file, int lines)
         {
-            StreamReader reader = new StreamReader(file.Name);
-            int[] result = new int[lines];
-            
-            for(int i = 0;i < lines; i++)
+            using (StreamReader reader = new StreamReader(file.Name))
             {
-                result[i] = reader.ReadLine().Split(" ").Length;
+                int[] result = new int[lines];
+
+                for (int i = 0; i < lines; i++)
+                {
+                    result[i] = reader.ReadLine().Split(" ").Length;
+                }
+
+                return result;
             }
-            reader.Close();
-            return result;
         }
 
         public static void printArray(int[] arr)
@@ -70,46 +72,50 @@ namespace lab1
         public static int[] getMaxLengths(FileStream file, int lines)
         {
             int[] lengths = new int[lines];
-            StreamReader reader = new StreamReader(file.Name);
-
-            for(int i = 0;i < lines; i++)
+            using (StreamReader reader = new StreamReader(file.Name))
             {
-                string line = reader.ReadLine();
-                string[] words = line.Split(" ");
-                int maxLength = 0;
-                for(int j = 0;j < words.Length; j++)
+
+                for (int i = 0; i < lines; i++)
                 {
-                    if(words[j].Length > maxLength)
+                    string line = reader.ReadLine();
+                    string[] words = line.Split(" ");
+                    int maxLength = 0;
+                    for (int j = 0; j < words.Length; j++)
                     {
-                        maxLength = words[j].Length;
+                        if (words[j].Length > maxLength)
+                        {
+                            maxLength = words[j].Length;
+                        }
                     }
+                    lengths[i] = maxLength;
                 }
-                lengths[i] = maxLength;
+                return lengths;
             }
-            reader.Close();
-            return lengths;
         }
 
         public static FileStream editFile(FileStream file, FileStream newFile, int[] numbersOfWords, int[] maxLengths, int linesAmount)
         {
-            StreamReader reader = new StreamReader(file.Name);
             string[] lines = new string[linesAmount];
-            for(int i = 0;i < linesAmount; i++)
-            {
-                lines[i] = reader.ReadLine();
-            }
-            reader.Close();
 
-            
-            StreamWriter writer = new StreamWriter(newFile.Name);
-            for(int i = 0;i < linesAmount; i++)
+            using (StreamReader reader = new StreamReader(file.Name))
             {
-                writer.WriteLine(numbersOfWords[i] + " " + lines[i] + " " + maxLengths[i]);
+                for (int i = 0; i < linesAmount; i++)
+                {
+                    lines[i] = reader.ReadLine();
+                }
+                
             }
-            writer.Flush();
-            writer.Close();
 
-            return newFile;
+
+            using (StreamWriter writer = new StreamWriter(newFile.Name))
+            {
+                for (int i = 0; i < linesAmount; i++)
+                {
+                    writer.WriteLine(numbersOfWords[i] + " " + lines[i] + " " + maxLengths[i]);
+                }
+
+                return newFile;
+            }
         }
     }
 }
