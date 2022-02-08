@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,15 +24,31 @@ namespace lab1
         public static void fillFile(FileStream file, ref int count)
         {
             Console.WriteLine("\nEnter 'stop' to stop input");
-            string input = Console.ReadLine();
+            
+            
 
             using (StreamWriter writer = new StreamWriter(file.Name))
             {
-                while (input != "stop")
+                string str = "";
+                while (true)
                 {
-                    writer.WriteLine(input);
-                    input = Console.ReadLine();
-                    count++;
+                    
+                    ConsoleKeyInfo cki = Console.ReadKey();
+                    if (cki.Key == ConsoleKey.Escape)
+                    {
+                        break;
+                    }
+                    else if (cki.Key == ConsoleKey.Enter)
+                    {
+                        Console.WriteLine();
+                        writer.WriteLine(str);
+                        count++;
+                        str = "";
+                    }
+                    else
+                    {
+                        str += cki.KeyChar;
+                    }
                 }
             }
             
