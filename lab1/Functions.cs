@@ -12,7 +12,7 @@ namespace lab1
         public static FileStream createFile(string name)
         {
             if (File.Exists(name + ".txt"))
-            { 
+            {
                 File.Delete(name + ".txt");
             }
 
@@ -23,18 +23,18 @@ namespace lab1
 
         public static void fillFile(FileStream file, ref int count)
         {
-            Console.WriteLine("\nEnter 'stop' to stop input");
-            
-            
+            Console.WriteLine("\nEnter lines: ");
+
+
 
             using (StreamWriter writer = new StreamWriter(file.Name))
             {
                 string str = "";
                 while (true)
                 {
-                    
+
                     ConsoleKeyInfo cki = Console.ReadKey();
-                    if (cki.Key == ConsoleKey.Escape)
+                    if (Convert.ToChar(cki.Key) < 32 && cki.Key != ConsoleKey.Enter)
                     {
                         break;
                     }
@@ -51,14 +51,14 @@ namespace lab1
                     }
                 }
             }
-            
+
         }
 
         public static void printFile(FileStream file)
         {
             using (StreamReader reader = new StreamReader(file.Name))
                 Console.WriteLine(reader.ReadToEnd());
-            
+
         }
 
         public static int[] getNumberOfWords(FileStream file, int lines)
@@ -69,7 +69,7 @@ namespace lab1
 
                 for (int i = 0; i < lines; i++)
                 {
-                    result[i] = reader.ReadLine().Split(" ").Length;
+                    result[i] = reader.ReadLine().Trim().Split(" ").Length;
                 }
 
                 return result;
@@ -78,7 +78,7 @@ namespace lab1
 
         public static void printArray(int[] arr)
         {
-            foreach(int item in arr)
+            foreach (int item in arr)
             {
                 Console.Write(item + " ");
             }
@@ -119,7 +119,7 @@ namespace lab1
                 {
                     lines[i] = reader.ReadLine();
                 }
-                
+
             }
 
 
